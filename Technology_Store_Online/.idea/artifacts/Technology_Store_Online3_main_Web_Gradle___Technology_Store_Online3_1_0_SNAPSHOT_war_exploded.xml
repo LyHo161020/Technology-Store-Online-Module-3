@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Technology_Store_Online3.main:Web Gradle : Technology_Store_Online3-1.0-SNAPSHOT.war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/Technology_Store_Online3_main_Web_Gradle___Technology_Store_Online3_1_0_SNAPSHOT_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="Technology_Store_Online3.main/web/Web Gradle : Technology_Store_Online3-1.0-SNAPSHOT.war" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Technology_Store_Online3.main" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
