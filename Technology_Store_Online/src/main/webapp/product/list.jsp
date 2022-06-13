@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +11,7 @@
     <meta content="Coderthemes" name="author">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- App favicon -->
+    <link href="/assets/css/style.css" rel="stylesheet">
     <link rel="shortcut icon" href="\assets\images\favicon.ico">
 
     <!-- Table datatable css -->
@@ -22,12 +24,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- App css -->
-    <link href="/assets/css/style.css" rel="stylesheet">
     <link href="\assets\css\bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap-stylesheet">
     <link href="\assets\css\icons.min.css" rel="stylesheet" type="text/css">
     <link href="\assets\css\app.min.css" rel="stylesheet" type="text/css" id="app-stylesheet">
+    <style>
+        td {
+            display: table-cell !important;
+            vertical-align: middle !important; /* Important */
+        }
 
-
+        .price {
+            color: #fe6f42;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
@@ -72,42 +82,48 @@
                                     </div>
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-3">
-                                        <a href="/customers?action=create" class="btn btn-outline-primary btn-add" style="margin-left: 15px">
+                                        <a href="/products?action=create" class="btn btn-outline-primary btn-add" style="margin-left: 15px">
                                             <i class="fa fa-plus"></i> Add new Customer
                                         </a>
                                     </div>
                                 </div>
                                 <p></p>
 
-                                <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;text-align: center " >
                                     <thead>
                                     <tr>
-                                        <th>Id</th>
-                                        <th>Type</th>
-                                        <th>Name</th>
-                                        <th>Amount</th>
-                                        <th>Price</th>
-                                        <th>Action</th>
+                                        <th class="col-1">Id</th>
+                                        <th class="col-1">Type</th>
+                                        <th class="col-3">Name</th>
+                                        <th class="col-2">Image</th>
+                                        <th class="col-2">Amount</th>
+                                        <th class="col-2">Price</th>
+                                        <th class="col-1">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                        <c:forEach var="product" items="${products}">
-                                           <tr>
-                                               <td>${product.getId()}</td>
-                                               <td>${product.getType()}</td>
-                                               <td>${product.getName()}</td>
-                                               <td>${product.getAmount()}</td>
-                                               <td>${product.getPrice()}</td>
-                                               <td>
-                                                   <a href="/customers?action=edit&id=${product.id}" class="btn btn-outline-secondary">
-                                                       <i class="fas fa-pen-square"></i>
-                                                   </a>
+                                                   <tr style="margin: 0 auto">
+                                                       <td>${product.getId()}</td>
+                                                       <td>${product.getType()}</td>
+                                                       <td>${product.getName()}</td>
+                                                       <td>
+                                                           <img src="${product.getImage()}" width="120px" height="auto"/>
+                                                       </td>
+                                                       <td>${product.getAmount()}</td>
+                                                       <td class="price">
+                                                           <fmt:formatNumber type="currency" pattern="#,###₫" value="${product.getPrice()}" />
+                                                       </td>
+                                                       <td>
+                                                           <a href="/products?action=edit&id=${product.id}" class="btn btn-outline-secondary">
+                                                               <i class="fas fa-pen-square"></i>
+                                                           </a>
 
-                                                   <a href="/customers?action=block&id=${product.id}" class="btn btn-outline-danger">
-                                                       <i class="fa fa-ban"></i>
-                                                   </a>
-                                               </td>
-                                           </tr>
+                                                           <a href="/products?action=block&id=${product.id}" class="btn btn-outline-danger">
+                                                               <i class="fa fa-ban"></i>
+                                                           </a>
+                                                       </td>
+                                                   </tr>
                                        </c:forEach>
                                     </tbody>
                                 </table>

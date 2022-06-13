@@ -7,43 +7,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mysql.jdbc.Driver;
+import utils.MySQLConnUtils;
 
 public class ProductService implements IProductService{
 
 
-    private String jdbcURL = "jdbc:mysql://localhost:3306/product_management";
-    private String jdbcUsername = "root";
-    private String jdbcPassword = "25251325";
+    private static final MySQLConnUtils mySQLConnUtils = new MySQLConnUtils();
 
-    private static final String SELECT_ALL_PRODUCTS = "SELECT * FROM product";
-    private static final String SELECT_PRODUCT_BY_ID = "SELECT id,type,name,amount,price FROM product WHERE id =?";
+    private static final String SELECT_ALL_PRODUCTS = "SELECT * FROM products WHERE deleted = ?";
+    private static final String SELECT_PRODUCT_BY_ID = "SELECT type, name, url_image, amount, price, deleted FROM products WHERE id =?";
 
-    private static final String CALL_UPDATE_PRODUCT_SQL = "{call sp_update_product(?, ?, ?, ?, ?, ?)}";
-    protected Connection getConnection() {
-        Connection connection = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return connection;
-    }
+    private static final String CALL_UPDATE_PRODUCT_SQL = "{call sp_update_product(?, ?, ?, ?, ?, ?, ?)}";
+    private static final String CALL_INSERT_PRODUCT_SQL = "{call sp_add_product(?, ?, ?, ?, ?, ?)}";
+
+    private static final String CALL_DELETE_PRODUCT_SQL = "{call sp_delete_product(?, ?)}";
 
     @Override
-    public boolean insertProduct(Product product) throws SQLException {
-        return false;
+    public String insertProduct(Product product) throws SQLException {
+        try {
+            Connection connection = mySQLConnUtils.getConnection();
+            CallableStatement callableStatement = connection.prepareCall(CALL_INSERT_PRODUCT_SQL);
+
+            callableStatement.setString(1, product.getType());
+            callableStatement.setString(2, product.getName());
+            callableStatement.setString(3,product.getImage());
+            callableStatement.setInt(4, product.getAmount());
+            callableStatement.setInt(5, product.getPrice());
+            callableStatement.registerOutParameter(6, Types.VARCHAR);
+            callableStatement.execute();
+            return callableStatement.getString(6);
+
+        }catch (SQLException e) {
+            mySQLConnUtils.printSQLException(e);
+        }
+        return null;
     }
 
     @Override
     public Product selectProduct(int id) {
         Product product = null;
         try {
-            Connection connection = getConnection();
+            Connection connection = mySQLConnUtils.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_PRODUCT_BY_ID);
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -51,12 +55,14 @@ public class ProductService implements IProductService{
             while (rs.next()) {
                 String type = rs.getString("type");
                 String name = rs.getString("name");
+                String urlImage = rs.getString("url_image");
                 int amount = Integer.parseInt(rs.getString("amount"));
                 int price = Integer.parseInt(rs.getString("price"));
-                product = new Product(id, type, name, amount, price);
+                boolean isDeleted = rs.getBoolean("deleted");
+                product = new Product(id, type, name,urlImage, amount, price,isDeleted);
             }
         } catch (SQLException e) {
-            printSQLException(e);
+            mySQLConnUtils.printSQLException(e);
         }
         return product;
     }
@@ -66,10 +72,10 @@ public class ProductService implements IProductService{
         List<Product> products = new ArrayList<>();
         // Step 1: Establishing a Connection
         try {
-            Connection connection = getConnection();
-
+            Connection connection = mySQLConnUtils.getConnection();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_PRODUCTS);
+            preparedStatement.setInt(1, 0);
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -78,39 +84,53 @@ public class ProductService implements IProductService{
                 int id = rs.getInt("id");
                 String type = rs.getString("type");
                 String name = rs.getString("name");
+                String urlImage = rs.getString("url_image");
                 int amount = Integer.parseInt(rs.getString("amount"));
                 int price = Integer.parseInt(rs.getString("price"));
-//                long balance = Long.parseLong(rs.getString("balance"));
-                products.add(new Product(id, type, name, amount,price));
+                boolean deleted = rs.getBoolean("deleted");
+                products.add(new Product(id, type, name,urlImage, amount,price,deleted));
             }
         } catch (SQLException e) {
-            printSQLException(e);
+            mySQLConnUtils.printSQLException(e);
         }
         return products;
     }
 
     @Override
-    public boolean deleteProduct(int id) throws SQLException {
-        return false;
+    public String deleteProduct(int id) throws SQLException {
+        try {
+            Connection connection = mySQLConnUtils.getConnection();
+            CallableStatement callableStatement = connection.prepareCall(CALL_DELETE_PRODUCT_SQL);
+
+            callableStatement.setInt(1, id);
+            callableStatement.registerOutParameter(2, Types.VARCHAR);
+            callableStatement.execute();
+            return callableStatement.getString(2);
+
+        }catch (SQLException e) {
+            mySQLConnUtils.printSQLException(e);
+        }
+        return null;
     }
 
     @Override
     public String updateProduct(Product product) throws SQLException {
         try {
-            Connection connection = getConnection();
+            Connection connection = mySQLConnUtils.getConnection();
             CallableStatement callableStatement = connection.prepareCall(CALL_UPDATE_PRODUCT_SQL);
 
             callableStatement.setInt(1, product.getId());
             callableStatement.setString(2, product.getType());
             callableStatement.setString(3, product.getName());
-            callableStatement.setInt(4, product.getAmount());
-            callableStatement.setInt(5, product.getPrice());
-            callableStatement.registerOutParameter(6, Types.VARCHAR);
+            callableStatement.setString(4, product.getImage());
+            callableStatement.setInt(5, product.getAmount());
+            callableStatement.setInt(6, product.getPrice());
+            callableStatement.registerOutParameter(7, Types.VARCHAR);
             callableStatement.execute();
-            return callableStatement.getString(4);
+            return callableStatement.getString(7);
 
         }catch (SQLException e) {
-            printSQLException(e);
+            mySQLConnUtils.printSQLException(e);
         }
         return null;
     }
@@ -120,19 +140,5 @@ public class ProductService implements IProductService{
         return null;
     }
 
-    public void printSQLException(SQLException ex) {
-        for (Throwable e : ex) {
-            if (e instanceof SQLException) {
-                e.printStackTrace(System.err);
-                System.err.println("SQLState: " + ((SQLException) e).getSQLState());
-                System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
-                System.err.println("Message: " + e.getMessage());
-                Throwable t = ex.getCause();
-                while (t != null) {
-                    System.out.println("Cause: " + t);
-                    t = t.getCause();
-                }
-            }
-        }
-    }
+
 }

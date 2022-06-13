@@ -6,27 +6,57 @@ public class Product implements Comparable<Product> {
     private int id;
     private String type;
     private String name;
+
+    private String image;
     private int amount;
     private int price;
+    private boolean deleted;
 
     public Product(){
     }
 
-//    public Product(String str){
-//        String[] strArr = str.split(",");
-//        this.id = Long.parseLong(strArr[0]);
-//        this.type = strArr[1];
-//        this.name = strArr[2];
-//        this.amount = Integer.parseInt(strArr[3]);
-//        this.price = Integer.parseInt(strArr[4]);
-//    }
-
-    public Product(int id, String type, String name, int amount, int price) {
+    public Product(int id, String type, String name, int amount, int price, boolean deleted) {
         this.id = id;
         this.type = type;
         this.name = name;
         this.amount = amount;
         this.price = price;
+        this.deleted = deleted;
+    }
+
+    public Product(int id, String type, String name,String urlImage, int amount, int price) {
+        this.id = id;
+        this.type = type;
+        this.name = name;
+        this.image = urlImage;
+        this.amount = amount;
+        this.price = price;
+    }
+
+    public Product(String type, String name, String urlImage, int amount, int price) {
+        this.type = type;
+        this.name = name;
+        this.image = urlImage;
+        this.amount = amount;
+        this.price = price;
+    }
+
+    public Product(int id, String type, String name, String urlImage, int amount, int price, boolean deleted) {
+        this.id = id;
+        this.type = type;
+        this.name = name;
+        this.image = urlImage;
+        this.amount = amount;
+        this.price = price;
+        this.deleted = deleted;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getType() {
@@ -69,9 +99,18 @@ public class Product implements Comparable<Product> {
         this.price = price;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+
     @Override
     public String toString() {
-        return id + "," + type + "," + name + "," + amount + "," + price;
+        return id + "," + type + "," + name + "," + "," + image + amount + "," + price + "," + deleted;
     }
 
     @Override

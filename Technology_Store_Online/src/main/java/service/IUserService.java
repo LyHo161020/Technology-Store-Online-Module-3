@@ -13,7 +13,7 @@ public interface IUserService {
 
     List<User> selectAllUser();
 
-    boolean deleteUser(int id) throws SQLException;
+    String deleteUser(int id) throws SQLException;
 
     boolean updateUser(User user) throws SQLException;
 

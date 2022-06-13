@@ -2,14 +2,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <title></title>
 </head>
 <body>
-<h1><%= "Hello World!" %>
-</h1>
-<br/>
-<script>
-    window.location.replace("/customers");
-</script>
+    <script>
+        // window.location.replace("/products")
+        window.location.replace("/login");
+    </script>
 </body>
 </html>

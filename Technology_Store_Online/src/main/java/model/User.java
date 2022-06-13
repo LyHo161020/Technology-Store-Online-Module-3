@@ -10,6 +10,7 @@ public class User {
     private String address;
     private String status;
     private Role role;
+
     public User(){
     }
 
@@ -24,6 +25,19 @@ public class User {
         this.status = "unlock";
         this.role = Role.fromValue(role);
     }
+
+    public User(int id, String username, String password, String name, String phone, String email, String address, String status, Role role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.status = status;
+        this.role = role;
+    }
+
 
     public Role getRole() {
         return role;

@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
-  Date: 11/06/2022
-  Time: 9:31 SA
+  Date: 10/06/2022
+  Time: 2:00 CH
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -65,7 +65,7 @@
                                         <li class="breadcrumb-item active">Form Validation</li>
                                     </ol>
                                 </div>
-                                <h2 class="page-title">Delete Product</h2>
+                                <h2 class="page-title">Delete User</h2>
                             </div>
                         </div>
                     </div>
@@ -81,12 +81,12 @@
                                         <div class="mt-4 mt-lg-0">
                                             <div class="row">
                                                 <div class="col-lg-8">
-                                                    <h3 class="header-title"><i>Please confirm to delete this product</i></h3>
+                                                    <h3 class="header-title"><i>Please confirm to delete this user</i></h3>
                                                 </div>
 
-                                                <div class="col-lg-4">
-                                                    <a href="/products" class="btn btn-outline-primary btn-add" style="margin-left: 15px">
-                                                        <i class="fas fa-list"></i> Back to List Product
+                                                <div class="col-lg-3">
+                                                    <a href="/users" class="btn btn-outline-primary btn-add" style="margin-left: 15px">
+                                                        <i class="fas fa-list"></i> Back to List User
                                                     </a>
                                                 </div>
                                             </div>
@@ -95,79 +95,106 @@
 
 
                                             <form role="form" class="parsley-examples" data-parsley-validate="" novalidate="" method="post">
-                                                <div class="form-group row">
-                                                    <%--                                                    <label for="inputEmail3" class="col-md-2 col-form-label">Email<span class="text-danger">*</span></label>--%>
-                                                    <label for="type" class="col-md-2 col-form-label">Type<span class="text-danger">*</span></label>
-                                                    <div class="col-md-8">
-                                                        <%--                                                        <input type="email" required="" parsley-type="email" class="form-control" id="inputEmail3" placeholder="Email">--%>
-                                                        <select id="type" class="form-select valid form-control" name="type" aria-invalid="false">
 
+                                                <div class="form-group row">
+                                                    <label for="userName" class="col-md-2 col-form-label">Username<span class="text-danger">*</span></label>
+                                                    <div class="col-md-8">
+                                                        <input disabled name="userName" id="userName" type="text" placeholder="Username" required="" class="form-control" value="${user.getUsername()}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="password" class="col-md-2 col-form-label">Password
+                                                        <span class="text-danger">*</span></label>
+                                                    <div class="col-md-8">
+                                                        <input disabled name="password" type="text" required="" placeholder="Password" class="form-control" id="password" value="${user.getPassword()}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="name" class="col-md-2 form-control-label">Name<span class="text-danger">*</span></label>
+                                                    <div class="col-md-8">
+                                                        <input disabled name="price" type="text" required=""  class="form-control" id="name" placeholder="Name" value="${user.getName()}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="phone" class="col-md-2 form-control-label">Phone<span class="text-danger">*</span></label>
+                                                    <div class="col-md-8">
+                                                        <input disabled name="phone" type="text" required=""  class="form-control" id="phone" placeholder="Phone" value="${user.getPhone()}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="email" class="col-md-2 form-control-label">Email<span class="text-danger">*</span></label>
+                                                    <div class="col-md-8">
+                                                        <input disabled name="email" type="text" required=""  class="form-control" id="email" placeholder="Email" value="${user.getEmail()}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="address" class="col-md-2 form-control-label">Address<span class="text-danger">*</span></label>
+                                                    <div class="col-md-8">
+                                                        <input disabled name="address" type="text" required=""  class="form-control" id="address" placeholder="Address" value="${user.getAddress()}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="status" class="col-md-2 col-form-label">Status<span class="text-danger">*</span></label>
+                                                    <div class="col-md-8">
+
+                                                        <select id="status" class="form-select valid form-control" name="status" aria-invalid="false">
                                                             <c:choose>
-                                                                <c:when test = "${['type'] == 'laptop'}">
-                                                                    <option class="form-select valid form-control" value="điện thoại" disabled >Điện thoại</option>
-                                                                    <option class="form-select valid form-control" value="laptop" selected>Laptop</option>
+                                                                <c:when test = "${user.getStatus() == 'block'}">
+                                                                    <option value="block" selected disabled>Block</option>
+                                                                    <option value="unlock" disabled>Unlock</option>
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <option class="form-select-button" value="điện thoại" selected disabled>Điện thoại</option>
-                                                                    <option class="form-select-button" value="laptop"  disabled>Laptop</option>
+                                                                    <option value="block" disabled>Block</option>
+                                                                    <option value="unlock" selected disabled>Unlock</option>
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </select>
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group row">
-                                                    <label for="name" class="col-md-2 col-form-label">Name<span class="text-danger">*</span></label>
+                                                    <label for="role" class="col-md-2 col-form-label">Role<span class="text-danger">*</span></label>
                                                     <div class="col-md-8">
-                                                        <input name="name" id="name" type="text" placeholder="Name" required="" class="form-control" value="${product.getName()}" disabled>
+
+                                                        <select id="role" class="form-select valid form-control" name="role" aria-invalid="false">
+                                                            <c:choose>
+                                                                <c:when test = "${user.getRole() == 'USER'}">
+                                                                    <option value="USER" selected disabled>USER</option>
+                                                                    <option value="ADMIN" disabled>ADMIN</option>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <option value="USER" disabled>USER</option>
+                                                                    <option value="ADMIN" selected disabled>ADMIN</option>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </select>
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group row">
-                                                    <label for="image" class="col-md-2 col-form-label">Image<span class="text-danger">*</span></label>
-                                                    <div class="col-md-8">
-                                                        <input name="image" id="image" type="text" placeholder="Image" required="" class="form-control" value="${product.getImage()}" disabled>
-                                                    </div>
-                                                </div>
 
-                                                <div class="form-group row">
-                                                    <label for="amount" class="col-md-2 col-form-label">Amount
-                                                        <span class="text-danger">*</span></label>
-                                                    <div class="col-md-8">
-                                                        <input name="amount" type="number" required="" placeholder="Amount" class="form-control" id="amount" value="${product.getAmount()}" disabled>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label for="price" class="col-md-2 form-control-label">Price<span class="text-danger">*</span></label>
-                                                    <div class="col-md-8">
-                                                        <input name="price" type="number" required=""  class="form-control" id="price" placeholder="Price" value="${product.getPrice()}" disabled>
-                                                    </div>
-                                                </div>
 
                                                 <div class="form-group row justify-content-end">
                                                     <div class="col-md-10">
                                                         <c:choose>
-                                                            <c:when test = "${!product.isDeleted()}">
-                                                                <button type="submit" class="btn btn-outline-danger waves-effect waves-light mr-1">
-                                                                    <i class="fas fa-ban"> </i>
-                                                                    Delete
+                                                            <c:when test = "${user.getStatus() == 'block'}">
+                                                                <button type="submit" class="btn btn-outline-success waves-effect waves-light mr-1">
+                                                                    <i class="fas fa-unlock"></i> </i> Unlock
                                                                 </button>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <button type="submit" class="btn btn-outline-danger waves-effect waves-light mr-1" disabled>
-                                                                    <i class="fas fa-ban"> </i>
-                                                                    Delete
+                                                                <button type="submit" class="btn btn-outline-danger waves-effect waves-light mr-1">
+                                                                    <i class="fas fa-lock"></i> </i> Block
                                                                 </button>
                                                             </c:otherwise>
                                                         </c:choose>
 
-
-<%--                                                        <button type="submit" class="btn btn-outline-danger waves-effect waves-light mr-1">--%>
-<%--                                                            <i class="fas fa-ban"> </i>--%>
-<%--                                                            Delete--%>
-<%--                                                        </button>--%>
-
-                                                        <a href="/products" class="btn btn-outline-secondary waves-effect">
+                                                        <a href="/users" class="btn btn-outline-secondary waves-effect">
                                                             Cancel
                                                         </a>
                                                     </div>
@@ -184,6 +211,7 @@
 
                     </div>
                     <!-- end row -->
+
                 </div> <!-- end container-fluid -->
 
             </div> <!-- end content -->
@@ -198,7 +226,10 @@
                             <c:choose>
                                 <c:when test = "${requestScope['message'] == null}" >
                                 </c:when>
-                                <c:when test='${requestScope["message"] == "Xóa sản phẩm thành công!"}'>
+                                <c:when test='${requestScope["message"] == "Khoá người dùng thành công!"}'>
+                                    <%@ include file="/alert/success.jsp"%>
+                                </c:when>
+                                <c:when test='${requestScope["message"] == "Mở khoá người dùng thành công!"}'>
                                     <%@ include file="/alert/success.jsp"%>
                                 </c:when>
                                 <c:otherwise>
@@ -229,6 +260,52 @@
     </div>
     <!-- END wrapper -->
 
+    <!-- Right Sidebar -->
+    <div class="right-bar">
+        <div class="rightbar-title">
+            <a href="javascript:void(0);" class="right-bar-toggle float-right">
+                <i class="mdi mdi-close"></i>
+            </a>
+            <h4 class="font-18 m-0 text-white">Theme Customizer</h4>
+        </div>
+        <div class="slimscroll-menu">
+
+            <div class="p-4">
+                <div class="alert alert-warning" role="alert">
+                    <strong>Customize </strong> the overall color scheme, layout, etc.
+                </div>
+                <div class="mb-2">
+                    <img src="\assets\images\layouts\light.png" class="img-fluid img-thumbnail" alt="">
+                </div>
+                <div class="custom-control custom-switch mb-3">
+                    <input type="checkbox" class="custom-control-input theme-choice" id="light-mode-switch" checked="">
+                    <label class="custom-control-label" for="light-mode-switch">Light Mode</label>
+                </div>
+
+                <div class="mb-2">
+                    <img src="\assets\images\layouts\dark.png" class="img-fluid img-thumbnail" alt="">
+                </div>
+                <div class="custom-control custom-switch mb-3">
+                    <input type="checkbox" class="custom-control-input theme-choice" id="dark-mode-switch" data-bsstyle="\assets/css/bootstrap-dark.min.css" data-appstyle="\assets/css/app-dark.min.css">
+                    <label class="custom-control-label" for="dark-mode-switch">Dark Mode</label>
+                </div>
+
+                <div class="mb-2">
+                    <img src="\assets\images\layouts\rtl.png" class="img-fluid img-thumbnail" alt="">
+                </div>
+                <div class="custom-control custom-switch mb-5">
+                    <input type="checkbox" class="custom-control-input theme-choice" id="rtl-mode-switch" data-appstyle="\assets/css/app-rtl.min.css">
+                    <label class="custom-control-label" for="rtl-mode-switch">RTL Mode</label>
+                </div>
+
+                <a href="https://1.envato.market/XY7j5" class="btn btn-danger btn-block mt-3" target="_blank"><i class="mdi mdi-download mr-1"></i> Download Now</a>
+            </div>
+        </div> <!-- end slimscroll-menu-->
+    </div>
+    <!-- /Right-bar -->
+
+    <!-- Right bar overlay-->
+    <div class="rightbar-overlay"></div>
 
     <a href="javascript:void(0);" class="right-bar-toggle demos-show-btn">
         <i class="mdi mdi-settings-outline mdi-spin"></i> &nbsp;Choose Demos
@@ -263,13 +340,6 @@
     <!-- App js -->
     <script src="\assets\js\app.min.js"></script>
 
-    <!-- Plugin js-->
-    <script src="\assets\libs\parsleyjs\parsley.min.js"></script>
-
-    <!-- Validation init js-->
-    <script src="\assets\js\pages\form-validation.init.js"></script>
-
-
-
 </body>
 </html>
+
